@@ -9,5 +9,6 @@ class TestOrdersList:
         response = api_client.get_orders_list()
         
         assert response.status_code == 200
-        assert "orders" in response.json()
-        assert isinstance(response.json()["orders"], list)
+        response_data = response.json()
+        assert "orders" in response_data
+        assert isinstance(response_data["orders"], list)

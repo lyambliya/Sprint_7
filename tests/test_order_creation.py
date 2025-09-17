@@ -19,4 +19,6 @@ class TestOrderCreation:
         response = api_client.create_order(order_data)
         
         assert response.status_code == 201
-        assert "track" in response.json()
+        response_data = response.json()
+        assert "track" in response_data
+        assert isinstance(response_data["track"], int)
