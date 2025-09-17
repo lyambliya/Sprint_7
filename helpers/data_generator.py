@@ -19,16 +19,3 @@ def generate_login_data(login, password):
         "login": login,
         "password": password
     }
-
-
-def generate_order_data():
-    return {
-        "firstName": "Иван",
-        "lastName": "Иванов",
-        "address": "ул. Пушкина, д. 10",
-        "metroStation": 4,
-        "phone": "+79991234567",
-        "rentTime": 5,
-        "deliveryDate": "2024-12-31",
-        "comment": "Тестовый заказ"
-    }

@@ -1,5 +1,6 @@
 import pytest
 import allure
+from ..data.constants import ORDER_DATA
 
 
 @allure.feature("Создание заказа")
@@ -12,7 +13,8 @@ class TestOrderCreation:
         None
     ])
     @allure.title("Создание заказа с разными вариантами цветов")
-    def test_create_order_with_different_colors(self, api_client, order_data, color):
+    def test_create_order_with_different_colors(self, api_client, color):
+        order_data = ORDER_DATA.copy()
         if color is not None:
             order_data["color"] = color
         

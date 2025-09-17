@@ -1,6 +1,7 @@
 import pytest
 import allure
 from ..helpers.data_generator import generate_courier_data, generate_login_data
+from ..data.constants import ERROR_MESSAGES
 
 
 @allure.feature("Создание курьера")
@@ -33,8 +34,7 @@ class TestCourierCreation:
         
         assert response.status_code == 409
         response_data = response.json()
-        assert "message" in response_data
-        assert "логин" in response_data["message"].lower() or "уже" in response_data["message"].lower()
+        assert response_data["message"] == ERROR_MESSAGES["duplicate_courier"]
     
     @allure.title("Создание курьера без логина возвращает ошибку")
     def test_create_courier_without_login(self, api_client):
@@ -45,7 +45,7 @@ class TestCourierCreation:
         
         assert response.status_code == 400
         response_data = response.json()
-        assert "message" in response_data
+        assert response_data["message"] == ERROR_MESSAGES["missing_field_create"]
     
     @allure.title("Создание курьера без пароля возвращает ошибку")
     def test_create_courier_without_password(self, api_client):
@@ -56,7 +56,7 @@ class TestCourierCreation:
         
         assert response.status_code == 400
         response_data = response.json()
-        assert "message" in response_data
+        assert response_data["message"] == ERROR_MESSAGES["missing_field_create"]
     
     @allure.title("Создание курьера без имени - поле не является обязательным")
     def test_create_courier_without_first_name(self, api_client, cleanup_couriers):

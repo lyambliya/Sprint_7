@@ -1,6 +1,7 @@
 import pytest
 import allure
 from ..helpers.data_generator import generate_login_data
+from ..data.constants import ERROR_MESSAGES
 
 
 @allure.feature("Логин курьера")
@@ -27,7 +28,7 @@ class TestCourierLogin:
         
         assert response.status_code == 404
         response_data = response.json()
-        assert "message" in response_data
+        assert response_data["message"] == ERROR_MESSAGES["login_failed"]
     
     @allure.title("Логин с неправильным логином возвращает ошибку")
     def test_login_with_wrong_login(self, api_client, registered_courier):
@@ -37,7 +38,7 @@ class TestCourierLogin:
         
         assert response.status_code == 404
         response_data = response.json()
-        assert "message" in response_data
+        assert response_data["message"] == ERROR_MESSAGES["login_failed"]
     
     @allure.title("Логин без логина возвращает ошибку")
     def test_login_without_login(self, api_client, registered_courier):
@@ -46,9 +47,9 @@ class TestCourierLogin:
         response = api_client.login_courier(login_data)
         
         assert response.status_code != 200
-        if response.status_code != 504:  # Игнорируем Gateway Timeout
+        if response.status_code == 400:
             response_data = response.json()
-            assert "message" in response_data
+            assert response_data["message"] == ERROR_MESSAGES["missing_field_login"]
     
     @allure.title("Логин без пароля возвращает ошибку")
     def test_login_without_password(self, api_client, registered_courier):
@@ -57,9 +58,9 @@ class TestCourierLogin:
         response = api_client.login_courier(login_data)
         
         assert response.status_code != 200
-        if response.status_code != 504:  # Игнорируем Gateway Timeout
+        if response.status_code == 400:
             response_data = response.json()
-            assert "message" in response_data
+            assert response_data["message"] == ERROR_MESSAGES["missing_field_login"]
     
     @allure.title("Логин несуществующего пользователя возвращает ошибку")
     def test_login_nonexistent_user(self, api_client):
@@ -69,4 +70,4 @@ class TestCourierLogin:
         
         assert response.status_code == 404
         response_data = response.json()
-        assert "message" in response_data
+        assert response_data["message"] == ERROR_MESSAGES["login_failed"]
